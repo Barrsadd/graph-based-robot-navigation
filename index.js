@@ -90,9 +90,9 @@ function findRoute(graph, from, to) {
     let { at, route } = work[i];
 
     for (let place of graph[at]) {
-      if (place == to) return route.concat(place); // Ketemu tempat tujuan, langsung return rutenya
-
-      // Cek apakah tempat ini udah dikunjungi
+      if (place == to) {
+        return route.concat(place);
+      }
       if (!work.some((w) => w.at == place)) {
         work.push({ at: place, route: route.concat(place) });
       }
@@ -103,11 +103,6 @@ function findRoute(graph, from, to) {
 // PART THREE IS ABOUT UTILITY FUNCTION
 // PART THREE  DONE
 // ======================================================================================================================
-
-function randomRobot(state) {
-  return { direction: randomPick(roadGraph[state.place]) };
-}
-
 const mailRoute = [
   "Alice's House",
   "Cabin",
@@ -123,6 +118,10 @@ const mailRoute = [
   "Marketplace",
   "Post Office",
 ];
+
+function randomRobot(state) {
+  return { direction: randomPick(roadGraph[state.place]) };
+}
 
 function routeRobot(state, memory) {
   if (memory.length == 0) {
@@ -140,6 +139,10 @@ function goalOrientedRobot({ place, parcels }, route) {
     } else {
       route = findRoute(roadGraph, place, parcel.address);
     }
+
+    if (!Array.isArray(route)) {
+      throw new Error("No route found!");
+    }
   }
 
   return { direction: route[0], memory: route.slice(1) };
@@ -150,6 +153,7 @@ function goalOrientedRobot({ place, parcels }, route) {
 // ======================================================================================================================
 
 function runRobot(state, robot, memory) {
+  // simulation robot behavior turn by turn
   for (let turn = 0; ; turn++) {
     if (state.parcels.length == 0) {
       console.log(`Done in ${turn} turns`); // Udah kelar, print hasilnya
@@ -166,12 +170,12 @@ function runRobot(state, robot, memory) {
 // PART FIVE DONE
 // ======================================================================================================================
 
-// TEST TEST TEST
-console.log("=== RANDOM ROBOT ===");
-runRobot(VillageState.random(), randomRobot);
+// LETS GO DO SOME FUCKING TESTTTT MATE!
+// console.log("=== RANDOM ROBOT ===");
+// runRobot(VillageState.random(), randomRobot);
 
-console.log("\n=== ROUTE ROBOT ===");
-runRobot(VillageState.random(), routeRobot, []);
+// console.log("\n=== ROUTE ROBOT ===");
+// runRobot(VillageState.random(), routeRobot, []);
 
-console.log("\n=== GOAL-ORIENTED ROBOT ===");
-runRobot(VillageState.random(), goalOrientedRobot, []);
+// console.log("\n=== GOAL-ORIENTED ROBOT ===");
+// runRobot(VillageState.random(), goalOrientedRobot, []);
